@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Menu } from 'antd'
 import { MailOutlined, AppstoreOutlined, SettingOutlined, UserOutlined, UserAddOutlined } from '@ant-design/icons';
 
-const { SubMenu } = Menu
+const { SubMenu, Item } = Menu
 
 const Header = () => {
     const [current,setCurrent] = useState('home')
@@ -11,17 +11,19 @@ const Header = () => {
     }
     return (
         <Menu onClick={handleClick} selectedKeys={[current]} mode="horizontal">
-        <Menu.Item key="home" icon={<AppstoreOutlined />}>
+        <Item key="home" icon={<AppstoreOutlined />}>
           Home
-        </Menu.Item>
+        </Item>
 
-        <Menu.Item key="login" icon={<UserOutlined />}>
-          Login
-        </Menu.Item>
-
-        <Menu.Item key="registernn" icon={<UserAddOutlined />}>
+        <Item key="registernn" icon={<UserAddOutlined />} className='float-right'>
           Register
-        </Menu.Item>
+        </Item>
+
+        <Item key="login" icon={<UserOutlined />} className='float-right'>
+          Login
+        </Item>
+
+        
 
         <SubMenu icon={<SettingOutlined />} title="Username">
             <Menu.Item key="setting:1">Register</Menu.Item>
