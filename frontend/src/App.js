@@ -1,23 +1,31 @@
-import React from "react"
-import { Switch, Route } from "react-router-dom"
-import Home from "./screens/Home"
-import Register from "./screens/auth/Register"
-import Login from "./screens/auth/Login"
-import DevFlow from "./screens/DevFlow"
-import Header from "./components/Header"
+import React, { useEffect } from "react";
+import { Switch, Route } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+import Login from "./pages/auth/Login";
+import Register from "./pages/auth/Register";
+import Home from "./pages/Home";
+import Header from "./components/nav/Header";
+import RegisterComplete from "./pages/auth/RegisterComplete";
+
+import { auth } from "./firebase";
 
 const App = () => {
+  
+
   return (
     <>
-      <Header /> 
+      <Header />
+      <ToastContainer />
       <Switch>
-        <Route path="/" component={Home} exact />
-        <Route path="/login" component={Login} />
-        <Route path="/register" component={Register} />
-        <Route path="/devflow" component={DevFlow} />
+        <Route exact path="/" component={Home} />
+        <Route exact path="/login" component={Login} />
+        <Route exact path="/register" component={Register} />
+        <Route exact path="/register/complete" component={RegisterComplete} />
       </Switch>
     </>
-  )
-}
+  );
+};
 
-export default App
+export default App;
