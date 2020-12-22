@@ -57,6 +57,8 @@ const DevFlow = () => {
             An onChange event handler that controls the state. The event calls the setEmail function at the target.value of the event, or e. 
           </li>
         </ul>
+        Now in the submitHandler... you need e . prevent Default ( ) 
+        It prevents the browser from reloading when the request is sent. 
       </p>
     </>
   )
