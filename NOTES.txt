@@ -1,0 +1,1 @@
+A reducer is a function that updates state
