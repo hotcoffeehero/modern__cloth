@@ -1,1 +1,31 @@
 A reducer is a function that updates state
+
+
+We are setting up a backend API with Node.js and MongoDB
+
+We want to use our own node server with mongodb
+In the backend, we'll validate our user token using firebase admin so the app is secure. 
+Once we implement firebase admin in the backend, when a user registers or logs in we will create or update the user in mongodb. 
+
+
+Then we'll tweek login/register so that when a user logs in, the response is from the backend. 
+
+Backend dependencies:
+express
+body-parser
+mongoose
+cors
+morgan 
+express-jwt
+firebase-admin
+jsonwebtoken
+nodemon
+dotenv
+
+The Backend dev flow in the server.js file
+1. Import all your packages with require()
+2. Run the app with express()
+3. Connect to the db with mongoose.connect()
+4. Setup your middleware with app.use()
+5. Set up your routes with app.get()
+6. Set up your port with the const port = process.env.PORT and app.listen()
