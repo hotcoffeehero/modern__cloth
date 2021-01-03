@@ -91,8 +91,9 @@ MiddleWare - VID 37
    - Remember in middleware the third argument next tells program to proceed to the next argument
 
   NOTE: next() is called IN the middleware function
-  
+==============================================================================  
 VID 38 - Auth Check MiddleWare
+==============================================================================
 - Our goal here is to send the usertoken from the frontend to
   the creae-or-update-user api endpoint
 - First we want to set up the api URL as an env variable IN THE frontend
@@ -137,6 +138,67 @@ VID 38 - Auth Check MiddleWare
    back to the server in the form of authToken in the headers
 
  - Since it returns a promise we can use .then() and .catch()
+
+ - Now we can make this authtoken available in our controller
+
+ ====================================================================
+ Vid 39 - Creating or Updating the User from fbase in our mongo cluster
+ ====================================================================
+- We have the token in our backend. 
+- We're going to continue working on the middleware, which uses
+  firebase to verify the token to make sure that it is valid. 
+- in the backend middleware/auth file....
+- remove the console log and set up a try catch, 
+  run a custom error message in a json object with a res status of 401
+- We verify the token with a firebase method called verifyIdToken in order to 
+  get what is called a uid
+
+https://firebase.google.com/docs/auth/admin/verify-id-tokens
+
+- We are going to create a function containing the uid that runs this verifyIdToken method
+- const firebaseUser or whatever
+- make the authcheck function async
+- console log it to take a look 
+- Remember this is a middleware function making the user info from firebase available
+  to the controller so that it can be available in our mongodb database
+- One way to do that is do make the info contained in the firebaseuser const
+  available in the authCheck req object
+- req.user = firebaseUser
+- Now it's available in the controller. GO. 
+
+//Controller
+- Import the user model from models in the c
+- The user object from firebase was huge. 
+- We're going to take the name, picture and email 
+- create a destructured constant of name, picture and email from req.user
+
+- Now we need to decide whether we are going to create or update. 
+- We need to check if a user already exists, if they do, 
+  we're not creating again, but updating. 
+  https://mongoosejs.com/docs/tutorials/findoneandupdate.html
+
+- The first argument of findoneandupdate is the filter, the thing by which
+  we are going to locate the thing we want to update. Here, it is email.
+- The second argument is the thing which we are going to update. Here, it's
+  the picture and name. 
+- the {new:true} argument returns the updated info
+- so now the updated info, called on the mongoose User model is avaiable in 
+  the const = user variable. 
+
+- Next is an if statement that checks to see if a user already exists
+  if it exists... the res.json... passes the user var with the updated infoo...
+- The else statment creates a new user using the user constructor from the models folder
+- The user model is saved in a const and has an object passed into it.
+    - The key:val are whatever we want the user object to be made up of...
+    - if the key:val are the same then {key} syntax is cool. 
+- Call the save() method on the new User constructor to put it in the DB. 
+- Finally send the response res.json() and pass the newUser const into it. 
+
+
+
+
+
+
 
   
 
