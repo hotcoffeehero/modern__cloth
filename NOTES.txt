@@ -1,3 +1,9 @@
+CONCURRENTLY
+- In the root foler Run
+  npm i -D concurrently (if you haven't already installed nodemon)
+  NOTE: the -D saves them as dev dependencies
+
+
 A reducer is a function that updates state
 
 
@@ -29,3 +35,111 @@ The Backend dev flow in the server.js file
 4. Setup your middleware with app.use()
 5. Set up your routes with app.get()
 6. Set up your port with the const port = process.env.PORT and app.listen()
+
+
+Firebase admin - VID 36
+When the user logs in in the front end, their information is saved to firebase. 
+We need to retrieve that information in the backend. 
+We need to receive the user 'token' and send it from front to back end. 
+
+Two things must be done:
+1. Verify that the token is valid
+2. Access the user info from firebase using that token. 
+
+Once we do this the user info can be saved in the mongoDB database. 
+Firebase admin is the tool that gets this done. 
+
+STEPS
+1. Go to firebase console, project setting, service accounts
+2. Click 'generate private key'
+3. Save that .json file to a backend folder 'config' and name it fb-service-account-key
+4. Back in the firebase console, copy the 'firebase admin sdk'.
+   Save it to a backend folder 'firebase' in a file called index.js
+   In the var serviceAccount, save the access key config file in the require() field
+
+NOW we can use the firebase admin tool to verify the user JWT
+
+MiddleWare - VID 37
+- When the frontend sends the user token to the backend, it will be received in the routes folder
+- in the auth.js file, the router.get(create or update user)
+- Change the method from GET to POST because we will be posting from front to backend from that route
+- The data we will be posting will be the user JWT
+- To grab that token we need another middleware function
+- Remember in the post request we had a control method that returns the data from controllers/auth.js file
+- between the post request and the backend response, we need to add a middleware function to validate the token
+
+  We're putting the middleware into a new backend folder aptly titled 'middleware'
+
+- There, create an auth.js file (in the middleware folder)
+- create an admin constant requiring firebase
+- In the firebase folder we have the index.js file with the initializeApp method
+  being called on the var admin requiring firebase-admin
+
+- In the middleware auth.js folder
+  create an export, he calls it authcheck exports.authcheck
+  It's a function
+  At the moment we are logging req.headers to the dev console
+  Because this is where the auth token will be sent
+  Now the authCheck function will be used as the middleware in the backend routes
+
+- In the ROUTES folder, in auth.js
+  Above the controllers, add a section for middleware
+  import authCheck as const { authCheck } requiring ../middleware/auth
+  Now it can be added to the router.post request between the route and the controllers
+  But wait...
+  Go back to middleware/auth in exports.auth and add arguments (req,res,next)
+   - Remember in middleware the third argument next tells program to proceed to the next argument
+
+  NOTE: next() is called IN the middleware function
+  
+VID 38 - Auth Check MiddleWare
+- Our goal here is to send the usertoken from the frontend to
+  the creae-or-update-user api endpoint
+- First we want to set up the api URL as an env variable IN THE frontend
+  Go to the frontend env
+  connect the backend api endpoint 'http://localhost:8000/api' to a an env
+  variable called REACT_APP_API
+- Remember that what we are doing is taking user login and register info from 
+  firebase admin and sending it to OUR local backend.
+- This user info is submitted in the frontend pages/auth/login file. GO. 
+- install and import axios in the frontend
+- using axios we want to execute a funtion that will make a request to
+  our local backend with the token in the submitHandler
+- We want to do this before we dispatch our login action
+- It will be called in the submitHandler but we will declare it globally
+  below the imports
+- Remember, in the backend, we had a controller that was returnig a response
+  from the local server to the frontend
+  Now, in the front end, we are connectin the two, essentially. 
+  - Declare an async function called createOrUpdateUser (if you use {}, use a return statement)
+  - we return an await post request to our backend api
+  - we do this using the process.env variable 
+      The url endpoint is the first argument
+  - The second argument is the request body
+    but here we aren't sending any data in the req.body so we can leave and empty object
+    remember, we're sending the token in the headers, this is why the body is empty
+  - The third argument is a nested object. Here we send the headers object
+    The key:value is authToken, they're the same. 
+    This value authToken is also passed in as an argument to the function
+
+ - Okay now we have declared the function that will make the request to the backend
+   with the token. 
+ - We need to call it in the submitHandler before the action is dispatched. 
+
+ - call the function passing idTokenResult as argument. 
+
+ NOTE: When you declare a function you define a parameter
+       When you call a function you pass an argument
+
+ - Remember the idTokenResult is a firebase object with a key:value of
+   token: 'string'. This string is the JWT token
+ - The function we just created will send this JWT token:string 
+   back to the server in the form of authToken in the headers
+
+ - Since it returns a promise we can use .then() and .catch()
+
+  
+
+
+
+
