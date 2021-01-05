@@ -7,8 +7,16 @@ const { authCheck } = require('../middleware/auth')
 
 
 //CONTROLLERS
-const { createOrUpdateUser } = require('../controllers/auth')
+const { 
+    createOrUpdateUser,
+    currentUser
+ } = require('../controllers/auth')
+
+
+//ENDPOINTS
 router.post('/create-or-update-user', authCheck, createOrUpdateUser)
+router.post('/current-user', authCheck, currentUser)
+
 
 
 

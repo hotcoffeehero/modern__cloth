@@ -1,11 +1,4 @@
-CONCURRENTLY
-- In the root foler Run
-  npm i -D concurrently (if you haven't already installed nodemon)
-  NOTE: the -D saves them as dev dependencies
-
-
 A reducer is a function that updates state
-
 
 We are setting up a backend API with Node.js and MongoDB
 
@@ -13,9 +6,8 @@ We want to use our own node server with mongodb
 In the backend, we'll validate our user token using firebase admin so the app is secure. 
 Once we implement firebase admin in the backend, when a user registers or logs in we will create or update the user in mongodb. 
 
-
 Then we'll tweek login/register so that when a user logs in, the response is from the backend. 
-
+============================================================================
 Backend dependencies:
 express
 body-parser
@@ -35,7 +27,7 @@ The Backend dev flow in the server.js file
 4. Setup your middleware with app.use()
 5. Set up your routes with app.get()
 6. Set up your port with the const port = process.env.PORT and app.listen()
-
+=================================================================================
 
 Firebase admin - VID 36
 When the user logs in in the front end, their information is saved to firebase. 
@@ -58,7 +50,7 @@ STEPS
    In the var serviceAccount, save the access key config file in the require() field
 
 NOW we can use the firebase admin tool to verify the user JWT
-
+=================================================================================
 MiddleWare - VID 37
 - When the frontend sends the user token to the backend, it will be received in the routes folder
 - in the auth.js file, the router.get(create or update user)
@@ -203,9 +195,85 @@ https://firebase.google.com/docs/auth/admin/verify-id-tokens
   in this method (remove the console log and put the dispatch function in the response )
 - In the dispatch payload, enter in all the key:vals from the mongoose user model.
 
+- At this point we only have the user info from firebase. Not from our own backend.
+  We need to connect with our backend's API endpoint. 
+- We will make reference to our backend API in the App.js useEffect. 
+- From Login.js we are manually updating the redux state
+- But whenever there is any change to the page, like a refresh, etc. 
+  useEffect will run. 
 
+- Now go to Google login and replace the dispatch with the createOrUpdateUser fuctions
+- In register complete, we need to do the same thing
+  We need to import usedispatch and use selector
+  To access user from the state, copy the destructured user const into reg complete
+  Import it (the const) above the useeffect underneat the other consts
+  copy over the createOrUpdateUser
 
+- Saving the user by their name in the backend...
+  In the header component, we have saved the user name via user.email
+  In controller auth.js, when we create a new user, 
+  in the name key:val, add the email.split('@')[0] as the val
 
+--Now, we are going to put all of the functions related to making requests
+  to our server in a new folder, creating and updating products and categories, etc
+- Create a foler in src called functions
+- create a file, auth.js
+- import axios
+- add the createOrUpdateUser const, but export it... export const, etc. 
+- Remember, we are in the frontend, so this is the part of the program 
+  where the front talks to the back. 
+- Now, in the login page we can import {}
+
+===============================================================================
+41 - Current User endpoint
+
+So now when we login or register we get a response from our own backend. 
+BUT BUT BUT. 
+Whenever there is any state change to the page, that info is lost, and we are left
+with only user email and token. 
+That's because in the App.js useEffect hook, which manages state change, as of now,
+it is communicating with firebase, not our server. 
+- What we can do is create a new API endpoint in our backend that gives us the 
+  currently logged in user. 
+- We need to create the endpoint in our backend
+- In backend/routes/auth - 
+    - Create a new post request /current-user, returning a function called
+      currentUser that gives us the currently logged in user. 
+- In controllers - 
+    - create an exports.currentUser
+    
+    Where does the user email info come from?
+    Remember, in the endpoint, before the currentUser function fires,
+    the authcheck middleware is called. 
+    If you check there, you will find the info stored in firebase, line 10. 
+
+    - the currentUser calls the findOne method from mongoose on our User model:
+      User.findOne
+    - pass in an object with a key:val email: req.user.email, the info That
+      is stored in firebase
+    - Then call the .exec() method, it takes a callback with paramaters err, user
+    - In the function body
+        we need an if statement that throws a new error if there is one
+        otherwise send the res.json response(user)
+
+    Now we need to export it from the functions folder in the frontend
+    Create a new function there 
+    name it current user and edit the endpoint to current-user
+
+    Now we need to import it in App.js
+    import it at the top
+    Replace the dipatch method with the createOrUpdateUser function
+
+======================================================================
+42 Role Base Redirect
+
+Where do we go when we login?
+It depends on who you are.
+
+Go to Login and below the imports create a function called
+roleBasedRedirect that takes (res) as an argument
+In the body put an if statment that res.data.role === 'admin'
+put it after let dispatch in the useEffect
 
 
 

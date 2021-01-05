@@ -1,7 +1,7 @@
 const { findOneAndUpdate } = require('../models/user')
 const User = require('../models/user')
 
-exports.createOrUpdateUser = async (req, res)=>{
+exports.createOrUpdateUser = async (req, res) => {
     const { name, picture, email } = req.user
 
     //Check if a user exists or not
@@ -22,4 +22,11 @@ exports.createOrUpdateUser = async (req, res)=>{
         console.log("NEW USER:", newUser)
         res.json(newUser)
     }
+}
+
+exports.currentUser = async (req, res) => {
+    User.findOne({email:req.user.email}).exec((err, user) => {
+        if(err) throw new Error(err)
+        res.json(user)
+    })
 }

@@ -13,6 +13,7 @@ import ForgotPassword from './pages/auth/ForgotPassword'
 
 import { auth } from "./firebase"
 import { useDispatch } from 'react-redux'
+import { createOrUpdateUser, currentUser } from './functions/auth'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -23,13 +24,20 @@ const App = () => {
       if (user) {
         const idTokenResult = await user.getIdTokenResult()
         console.log('user', user)
+        
+      currentUser(idTokenResult.token)
+      .then((res)=> {
         dispatch({
-          type: 'USER_LOGGED_IN',
+          type: "USER_LOGGED_IN",
           payload: {
-            email: user.email,
-            token: idTokenResult.token
-          }
+            name: res.data.name,
+            email: res.data.email,
+            res: res.data.role, 
+            token: idTokenResult.token,
+          },
         })
+      })
+      .catch(err => console.log(err))
       }
     })
     return () => unsubscribe()

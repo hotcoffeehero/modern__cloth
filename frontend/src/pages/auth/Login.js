@@ -7,8 +7,6 @@ import { useDispatch, useSelector } from "react-redux"
 import { Link } from 'react-router-dom'
 import {createOrUpdateUser} from '../../functions/auth'
 
-
-
 const Login = ({ history }) => {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("123456")
@@ -21,6 +19,15 @@ const Login = ({ history }) => {
   },[user])
 
   let dispatch = useDispatch()
+
+  const roleBasedRedirect = (res) => {
+    if(res.data.role === 'admin') {
+      history.push('/admin/dashboard')
+    } else {
+      history.push('/user/history')
+    }
+    
+  } 
 
   const submitHandler = async (e) => {
     e.preventDefault()
@@ -45,11 +52,10 @@ const Login = ({ history }) => {
             token: idTokenResult.token,
           },
         })
+        roleBasedRedirect(res)
       })
-      .catch()
+      .catch(err => console.log(err))
 
-
-      
       history.push("/")
     } catch (error) {
       console.log(error)
@@ -75,8 +81,10 @@ const Login = ({ history }) => {
             token: idTokenResult.token,
           },
         })
+
+      roleBasedRedirect(res)
       })
-      .catch()
+      .catch(err => console.log(err))
       history.push("/")
     })
     .catch((err)=>{
