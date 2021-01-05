@@ -195,6 +195,15 @@ https://firebase.google.com/docs/auth/admin/verify-id-tokens
 - Finally send the response res.json() and pass the newUser const into it. 
 
 
+=========================================================================
+40 - API response
+- Now we are getting the user credentials from our own server
+  using the createOrUpdateUser method we created. 
+- Now we can dispatch the user info to our redux store
+  in this method (remove the console log and put the dispatch function in the response )
+- In the dispatch payload, enter in all the key:vals from the mongoose user model.
+
+
 
 
 

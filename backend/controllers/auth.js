@@ -5,7 +5,10 @@ exports.createOrUpdateUser = async (req, res)=>{
     const { name, picture, email } = req.user
 
     //Check if a user exists or not
-    const user = await User.findOneAndUpdate({email}, {name, picture}, {new:true})
+    const user = await User.findOneAndUpdate(
+        {email}, 
+        {name: email.split('@')[0], picture}, 
+        {new:true})
 
     if(user){
         res.json(user)
@@ -13,7 +16,7 @@ exports.createOrUpdateUser = async (req, res)=>{
     } else {
         const newUser = await new User({
             email,
-            name,
+            name: email.split('@')[0],
             picture,
         }).save()
         console.log("NEW USER:", newUser)
