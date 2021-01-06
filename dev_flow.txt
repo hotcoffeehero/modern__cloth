@@ -275,6 +275,39 @@ roleBasedRedirect that takes (res) as an argument
 In the body put an if statment that res.data.role === 'admin'
 put it after let dispatch in the useEffect
 
+=====================================================================
+
+43 Protected Routes
+
+- So once the user logs in they're directed to user/history.
+- We need to make it to where only they can access that page. 
+- The route needs 'protection' lol. 
+- Frontend/pages, create a new folder for user-related routes called 'user' 
+- Create a History.js file
+- import History in App.js
+
+- In components folder, create a new folder called routes
+- create a new file called UserRoute.js
+- create an exportable function called UserRoute
+- pass in the children props deconstructed {children ...rest}
+
+- First we are going to access the user from state
+- In the fuction body create a const whose value is the user object
+- This const is the useSelector function with state passed in as an argument
+- in the body, we will return state using the spread operator
+
+https://reactrouter.com/native/example/auth-workflow
+
+- we're going to return the user and the user token. 
+- If we have the user in the state, we want to return the route with the rest of the
+  props and the children.
+- Otherwise we show loading
+
+- So now we have this user route that has this protection in it. 
+- We can use it to protect all of the user routes. 
+- Import it in App.js
+- Now, instead of <Route />, we can use <UserRoute />
+
 
 
   
