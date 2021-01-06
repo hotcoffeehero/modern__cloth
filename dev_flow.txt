@@ -308,6 +308,21 @@ https://reactrouter.com/native/example/auth-workflow
 - Import it in App.js
 - Now, instead of <Route />, we can use <UserRoute />
 
+==============================================================================
+44 - Redirect countdown
+- In the new routes folder
+- create a component called LoadingToRedirect.js
+- create a rafce
+- import the useHistory hook from react-router-dom
+- the state will be [count, setCount] = useState(5)
+- Whenever the count changes, useEffect will run. 
+- When it runs, it will decrement the count from the state
+- in the function body, call useEffect with [count] as a dependency
+- call setInterval in a const called interval
+
+- Import LoadingToRedirect in UserRoute
+
+
 
 
   
